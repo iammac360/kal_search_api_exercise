@@ -5,10 +5,10 @@ defmodule SearchApi.RouterTest do
 
   doctest SearchApi.Router
 
-  test "GET /suppliers should return 404 when required params is not supplied" do
+  test "GET /suppliers should return 400 when required params is not supplied" do
     response = conn(:get, "/suppliers") |> Router.call([])
 
-    assert response.status == 404
+    assert response.status == 400
   end
 
   test "GET /suppliers should return 200 and all the suppliers data when required params are present" do
