@@ -47,7 +47,7 @@ defmodule SearchApi do
   def filter_lower_rates(data) do
     data 
     |> Enum.sort_by(fn %{price: price} -> price end) # Sort by price from lowest to highest
-    |> Enum.uniq_by(fn %{id: id} -> id end) # Remove duplicate suppliers
+    |> Enum.uniq_by(fn %{id: id} -> id end) # Remove duplicate ids
   end
 
   def fetch_suppliers_data(suppliers, key) do
