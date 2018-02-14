@@ -15,6 +15,21 @@ https://pure-sands-99599.herokuapp.com/suppliers?checkin=1518628132&checkout=151
 You can easily install erlang and elixir dependencies using [asdf](https://github.com/asdf-vm/asdf). When you are using `asdf`, it
 will automatically read the `.tool-versions` file and it will set the specific version of your erlang and elixir.
 
+
+## Setting up the project
+1. Clone the Repo and go to the project directory.
+
+```
+https://github.com/iammac360/kal_search_api_exercise.git
+
+cd kal_search_api_exercise
+```
+2. Install the dependencies
+
+```
+mix.deps.get && mix.deps.compile
+```
+
 ## Running the App
 
 Just run `mix run --no-halt` to start the web server.
@@ -33,6 +48,8 @@ http://localhost:4001/suppliers?checkin=1&checkout=2&destination=3&guests=3&supp
 ## Runnig the test
 
 Just run `mix test`
+
+For static analysis, Just run `mix credo`
 
 
 ## TODO
