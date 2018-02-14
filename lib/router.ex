@@ -21,7 +21,7 @@ defmodule SearchApi.Router do
   } = params) do
 
     suppliers = params["suppliers"] || "" # Optional param
-    key = "#{checkin}:#{checkout}:#{destination}:#{guests}"
+    key = "#{checkin}:#{checkout}:#{destination}:#{guests}#{suppliers}"
     
     data = fetch_suppliers_data(suppliers, key)
 
