@@ -10,7 +10,7 @@ defmodule SearchApi do
   ]
 
   @cache :search_api
-  @timeout 145000
+  @timeout 145_000
   @ttl_in_sec 300 # 5 minutes
 
   def filter_supplier_url_list(nil), do: @urls
@@ -22,7 +22,8 @@ defmodule SearchApi do
 
   def get_suppliers(urls) do
     # Make http request from urls concurrently and asynchronously
-    Enum.map(urls, fn(url) -> Task.async(fn -> get_supplier(url) end) end)
+    urls 
+    |> Enum.map(fn(url) -> Task.async(fn -> get_supplier(url) end) end)
     |> Enum.map(fn(task) -> Task.await(task, @timeout) end)
     |> List.flatten
   end
@@ -48,7 +49,9 @@ defmodule SearchApi do
         IO.puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
         IO.puts "#{key} is not yet cached fetching records from external source"
         IO.puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-        to_be_cached = String.split(suppliers, ",")
+
+        to_be_cached = suppliers
+        |> String.split(",")
         |> filter_supplier_url_list
         |> get_suppliers
 
