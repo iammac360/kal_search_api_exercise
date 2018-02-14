@@ -43,7 +43,7 @@ http://localhost:4001/suppliers?checkin=1&checkout=2&destination=3&guests=3&supp
 ```
 
 
-## Runnig the test
+## Running the test
 
 Just run `mix test`
 
