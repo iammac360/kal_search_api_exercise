@@ -1,21 +1,40 @@
-# SearchApi
+# Suppliers Search API
 
-**TODO: Add description**
+## Description
+Simple Suppliers Search API built with Elixir Plug(For handling http requests), Cachex(For caching) and Cowboy(Web Server).
 
-## Installation
+## Requirements
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `search_api` to your list of dependencies in `mix.exs`:
+* erlang 20.1 or later
+* elixir 1.5.2 or later
 
-```elixir
-def deps do
-  [
-    {:search_api, "~> 0.1.0"}
-  ]
-end
+You can easily install erlang and elixir dependencies using [asdf](https://github.com/asdf-vm/asdf). When you are using `asdf`, it
+will automatically read the `.tool-versions` file and it will set the specific version of your erlang and elixir.
+
+## Running the App
+
+Just run `mix run --no-halt` to start the web server.
+
+Then in your browser go to `http://localhost:4001/suppliers?checkin=1&checkout=2&destination=3&guests=3`.
+
+Make sure you have the following query parameters(`checkin`, `checkout`, `destination` and `guest`) otherwise, it will return a 400 Bad Request Error. You can put any value on these parameters
+
+For filtering the suppliers, You need to have a `suppliers` query parameter for e.g.
+
+```
+http://localhost:4001/suppliers?checkin=1&checkout=2&destination=3&guests=3&suppliers=supplier1,supplier3
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/search_api](https://hexdocs.pm/search_api).
+
+## Runnig the test
+
+Just run `mix test`
+
+
+## TODO
+
+* Add test on caching mechanism
+* Add an http request recording like [exvcr](https://github.com/parroty/exvcr) to record http request on tests.
+
+
 
