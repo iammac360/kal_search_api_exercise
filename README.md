@@ -5,7 +5,7 @@ Simple Suppliers Search API built with Elixir Plug(For handling http requests), 
 
 ## Demo App
 
-(https://pure-sands-99599.herokuapp.com/suppliers?checkin=1&checkout=2&=3&guests=3&destination=1&suppliers=supplier1)[https://pure-sands-99599.herokuapp.com/suppliers?checkin=1&checkout=2&=3&guests=3&destination=1&suppliers=supplier1]
+https://pure-sands-99599.herokuapp.com/suppliers?checkin=1518628132&checkout=1518800932&guests=3&destination=MNL&suppliers=supplier1,supplier2
 
 ## Requirements
 
