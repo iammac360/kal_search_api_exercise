@@ -26,6 +26,7 @@ defmodule SearchApi do
     |> Enum.map(fn(url) -> Task.async(fn -> get_supplier(url) end) end)
     |> Enum.map(fn(task) -> Task.await(task, @timeout) end)
     |> List.flatten
+    |> filter_lower_rates
   end
 
   def get_supplier({supplier, url}) do
@@ -41,6 +42,12 @@ defmodule SearchApi do
       _ ->
         {:error, "Error #{status_code}"}
     end
+  end
+
+  def filter_lower_rates(data) do
+    data 
+    |> Enum.sort_by(fn %{price: price} -> price end) # Sort by price from lowest to highest
+    |> Enum.uniq_by(fn %{id: id} -> id end) # Remove duplicate suppliers
   end
 
   def fetch_suppliers_data(suppliers, key) do

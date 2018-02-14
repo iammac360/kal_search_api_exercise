@@ -30,6 +30,14 @@ defmodule SearchApiTest do
 
   test "get_suppliers returns all suppliers data" do
     assert SearchApi.get_suppliers(@urls) == [
+      %{id: "mnop", price: 288.3, supplier: "supplier1"},
+      %{id: "abcd", price: 299.9, supplier: "supplier2"},
+      %{id: "defg", price: 320.49, supplier: "supplier3"},
+    ]
+  end
+
+  test "filter_lower_rates retursn all lower rates" do
+    test_data = [
       %{id: "abcd", price: 300.2, supplier: "supplier1"},
       %{id: "defg", price: 403.22, supplier: "supplier1"},
       %{id: "mnop", price: 288.3, supplier: "supplier1"},
@@ -38,6 +46,12 @@ defmodule SearchApiTest do
       %{id: "abcd", price: 340.2, supplier: "supplier3"},
       %{id: "defg", price: 320.49, supplier: "supplier3"},
       %{id: "mnop", price: 317.0, supplier: "supplier3"}
+    ]
+
+    assert SearchApi.filter_lower_rates(test_data) == [
+      %{id: "mnop", price: 288.3, supplier: "supplier1"},
+      %{id: "abcd", price: 299.9, supplier: "supplier2"},
+      %{id: "defg", price: 320.49, supplier: "supplier3"},
     ]
   end
 

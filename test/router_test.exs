@@ -18,14 +18,9 @@ defmodule SearchApi.RouterTest do
     assert response.status == 200
 
     assert Poison.decode!(response.resp_body) == [
-      %{"id" => "abcd", "price" => 300.2, "supplier" => "supplier1"},
-      %{"id" => "defg", "price" => 403.22, "supplier" => "supplier1"},
       %{"id" => "mnop", "price" => 288.3, "supplier" => "supplier1"},
       %{"id" => "abcd", "price" => 299.9, "supplier" => "supplier2"},
-      %{"id" => "mnop", "price" => 340.33, "supplier" => "supplier2"},
-      %{"id" => "abcd", "price" => 340.2, "supplier" => "supplier3"},
       %{"id" => "defg", "price" => 320.49, "supplier" => "supplier3"},
-      %{"id" => "mnop", "price" => 317.0, "supplier" => "supplier3"}
     ]
   end
 
@@ -36,12 +31,9 @@ defmodule SearchApi.RouterTest do
     assert response.status == 200
 
     assert Poison.decode!(response.resp_body) == [
-      %{"id" => "abcd", "price" => 300.2, "supplier" => "supplier1"},
-      %{"id" => "defg", "price" => 403.22, "supplier" => "supplier1"},
       %{"id" => "mnop", "price" => 288.3, "supplier" => "supplier1"},
-      %{"id" => "abcd", "price" => 340.2, "supplier" => "supplier3"},
+      %{"id" => "abcd", "price" => 300.2, "supplier" => "supplier1"},
       %{"id" => "defg", "price" => 320.49, "supplier" => "supplier3"},
-      %{"id" => "mnop", "price" => 317.0, "supplier" => "supplier3"}
     ]
   end
 
