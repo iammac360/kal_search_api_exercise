@@ -20,9 +20,7 @@ will automatically read the `.tool-versions` file and it will set the specific v
 1. Clone the Repo and go to the project directory.
 
 ```
-https://github.com/iammac360/kal_search_api_exercise.git
-
-cd kal_search_api_exercise
+git clone https://github.com/iammac360/kal_search_api_exercise.git && cd kal_search_api_exercise
 ```
 2. Install the dependencies
 
