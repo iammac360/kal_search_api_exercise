@@ -27,6 +27,7 @@ defmodule SearchApi.Mixfile do
       {:cowboy, "~> 1.0.0"},
       {:plug, "~> 1.0"},
       {:cachex, "~> 2.1"},
+      {:credo, "~> 0.9.0-rc1", only: [:dev, :test], runtime: false},
       {:exvcr, git: "https://github.com/parroty/exvcr.git", tag: "v0.10.0", only: :test}
     ]
   end
