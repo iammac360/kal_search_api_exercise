@@ -7,31 +7,29 @@ defmodule SearchApi.Router do
   plug :match
   plug :dispatch
 
-  get "/suppliers", do: foo(conn, fetch_query_params(conn).params)
+  get "/suppliers", do: suppliers_handler(conn, fetch_query_params(conn).params)
 
   match _ do
     send_resp(conn, 404, "Not found.")
   end
 
-  def foo(conn, %{
+  def suppliers_handler(conn, %{
     "checkin" => checkin,
     "checkout" => checkout,
     "destination" => destination,
     "guests" => guests
   } = params) do
-    suppliers = params["suppliers"] || "" # Optional param
-    cache_key = "#{checkin}:#{checkout}:#{destination}:#{guests}"
 
-    data = String.split(suppliers, ",")
-    |> filter_supplier_url_list
-    |> get_suppliers
-    |> Poison.encode!
+    suppliers = params["suppliers"] || "" # Optional param
+    key = "#{checkin}:#{checkout}:#{destination}:#{guests}"
+    
+    data = fetch_suppliers_data(suppliers, key)
 
     conn
     |> put_resp_content_type("text/json")
-    |> send_resp(200, data)
+    |> send_resp(200, Poison.encode!(data))
   end
-  def foo(conn, _) do
+  def suppliers_handler(conn, _) do
     error = "Required Fields are missing. \
       Please check if you have checkin, checkout, \
       destination and guests on your query params"

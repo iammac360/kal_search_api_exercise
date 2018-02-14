@@ -9,7 +9,9 @@ defmodule SearchApi do
     {"supplier3", "https://api.myjson.com/bins/15ktg"}
   ]
 
+  @cache :search_api
   @timeout 145000
+  @ttl_in_sec 300 # 5 minutes
 
   def filter_supplier_url_list(nil), do: @urls
   def filter_supplier_url_list([]), do: @urls
@@ -37,6 +39,29 @@ defmodule SearchApi do
 
       _ ->
         {:error, "Error #{status_code}"}
+    end
+  end
+
+  def fetch_suppliers_data(suppliers, key) do
+    case Cachex.get(@cache, key) do
+      {:missing, nil} -> 
+        IO.puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+        IO.puts "#{key} is not yet cached fetching records from external source"
+        IO.puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+        to_be_cached = String.split(suppliers, ",")
+        |> filter_supplier_url_list
+        |> get_suppliers
+
+        Cachex.set(@cache, key, to_be_cached, [ttl: :timer.seconds(@ttl_in_sec)])
+
+        to_be_cached
+
+      {:ok, cached_data} -> 
+        IO.puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+        IO.puts "#{key} found. Retrieving Cache"
+        IO.puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+
+        cached_data
     end
   end
 end

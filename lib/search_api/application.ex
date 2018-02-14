@@ -6,12 +6,15 @@ defmodule SearchApi.Application do
   use Application
 
   def start(_type, _args) do
+    import Supervisor.Spec
+
     # List all child processes to be supervised
     children = [
       # Starts a worker by calling: SearchApi.Worker.start_link(arg)
       # {SearchApi.Worker, arg},
 
-      Plug.Adapters.Cowboy.child_spec(scheme: :http, plug: SearchApi.Router, options: [port: 4001])
+      Plug.Adapters.Cowboy.child_spec(scheme: :http, plug: SearchApi.Router, options: [port: 4001]),
+      worker(Cachex, [:search_api, []])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

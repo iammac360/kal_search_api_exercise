@@ -14,7 +14,7 @@ defmodule SearchApi.Mixfile do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :cowboy, :plug, :httpoison],
+      extra_applications: [:logger, :cowboy, :plug, :httpoison, :cachex],
       mod: {SearchApi.Application, []}
     ]
   end
@@ -26,6 +26,7 @@ defmodule SearchApi.Mixfile do
       {:poison, "~> 3.1"},
       {:cowboy, "~> 1.0.0"},
       {:plug, "~> 1.0"},
+      {:cachex, "~> 2.1"},
       {:exvcr, git: "https://github.com/parroty/exvcr.git", tag: "v0.10.0", only: :test}
     ]
   end

@@ -1,5 +1,5 @@
 defmodule SearchApiTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   doctest SearchApi
 
