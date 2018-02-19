@@ -25,28 +25,8 @@ defmodule SearchApi do
     urls 
     |> Enum.map(fn(url) -> Task.async(fn -> get_supplier(url) end) end)
     |> Enum.reduce(nil, &handle_task/2)
-    |> case do
-      nil -> []
-      data ->
-        for {id, {supplier, price}} <- data, do: %{id: id, price: price, supplier: supplier}
-    end
+    |> map_response
   end
-
-  def handle_task(task, nil), do: Task.await(task, @timeout)
-  def handle_task(task, acc) do
-    data = Task.await(task, @timeout)
-    
-    for {k, {s1, p1}} <- acc, into: %{} do
-      case data[k] do
-        nil -> {k, {s1, p1}}
-
-        {s2, p2} ->
-          # Evaluate lowest price
-          if p1 < p2, do: {k, {s1, p1}}, else: {k, {s2, p2}}
-      end
-    end
-  end
-
 
   def get_supplier({supplier, url}) do
     case Cachex.get(@cache, supplier) do
@@ -95,6 +75,29 @@ defmodule SearchApi do
         IO.puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
         cached_data
+    end
+  end
+
+  defp handle_task(task, nil), do: Task.await(task, @timeout)
+  defp handle_task(task, acc) do
+    data = Task.await(task, @timeout)
+    
+    for {k, {s1, p1}} <- acc, into: %{} do
+      case data[k] do
+        nil -> {k, {s1, p1}}
+
+        {s2, p2} ->
+          # Evaluate lowest price
+          if p1 < p2, do: {k, {s1, p1}}, else: {k, {s2, p2}}
+      end
+    end
+  end
+
+  defp map_response(data) do
+    case(data) do
+      nil -> []
+      data ->
+        for {id, {supplier, price}} <- data, do: %{id: id, price: price, supplier: supplier}
     end
   end
 end
