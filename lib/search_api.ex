@@ -29,7 +29,28 @@ defmodule SearchApi do
     |> filter_lower_rates
   end
 
+  def filter_lower_rates(data) do
+    data 
+    |> Enum.sort_by(fn %{price: price} -> price end) # Sort by price from lowest to highest
+    |> Enum.uniq_by(fn %{id: id} -> id end) # Remove duplicate ids
+  end
+
+
   def get_supplier({supplier, url}) do
+    case Cachex.get(@cache, supplier) do
+      {:missing, nil} ->
+        IO.puts "Supplier: #{supplier} is not yet cached fetching records from external source"
+        to_be_cached = get_supplier_from_api({supplier, url})
+        Cachex.set(@cache, supplier, to_be_cached, [ttl: :timer.seconds(@ttl_in_sec)])
+
+        to_be_cached
+      {:ok, cached_data} ->
+        IO.puts "Supplier: #{supplier} found. Retrieving Cache"
+        cached_data
+    end
+  end
+
+  def get_supplier_from_api({supplier, url}) do
      %HTTPoison.Response{body: body, status_code: status_code} = HTTPoison.get!(url)
 
     case status_code do
@@ -42,12 +63,6 @@ defmodule SearchApi do
       _ ->
         {:error, "Error #{status_code}"}
     end
-  end
-
-  def filter_lower_rates(data) do
-    data 
-    |> Enum.sort_by(fn %{price: price} -> price end) # Sort by price from lowest to highest
-    |> Enum.uniq_by(fn %{id: id} -> id end) # Remove duplicate ids
   end
 
   def fetch_suppliers_data(suppliers, key) do
