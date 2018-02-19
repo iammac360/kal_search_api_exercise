@@ -18,9 +18,9 @@ defmodule SearchApi.RouterTest do
     assert response.status == 200
 
     assert Poison.decode!(response.resp_body) == [
-      %{"id" => "mnop", "price" => 288.3, "supplier" => "supplier1"},
       %{"id" => "abcd", "price" => 299.9, "supplier" => "supplier2"},
       %{"id" => "defg", "price" => 320.49, "supplier" => "supplier3"},
+      %{"id" => "mnop", "price" => 288.3, "supplier" => "supplier1"},
     ]
   end
 
@@ -31,9 +31,9 @@ defmodule SearchApi.RouterTest do
     assert response.status == 200
 
     assert Poison.decode!(response.resp_body) == [
-      %{"id" => "mnop", "price" => 288.3, "supplier" => "supplier1"},
       %{"id" => "abcd", "price" => 300.2, "supplier" => "supplier1"},
       %{"id" => "defg", "price" => 320.49, "supplier" => "supplier3"},
+      %{"id" => "mnop", "price" => 288.3, "supplier" => "supplier1"},
     ]
   end
 

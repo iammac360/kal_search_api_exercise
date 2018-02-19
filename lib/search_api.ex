@@ -24,15 +24,27 @@ defmodule SearchApi do
     # Make http request from urls concurrently and asynchronously
     urls 
     |> Enum.map(fn(url) -> Task.async(fn -> get_supplier(url) end) end)
-    |> Enum.map(fn(task) -> Task.await(task, @timeout) end)
-    |> List.flatten
-    |> filter_lower_rates
+    |> Enum.reduce(nil, &handle_task/2)
+    |> case do
+      nil -> []
+      data ->
+        for {id, {supplier, price}} <- data, do: %{id: id, price: price, supplier: supplier}
+    end
   end
 
-  def filter_lower_rates(data) do
-    data 
-    |> Enum.sort_by(fn %{price: price} -> price end) # Sort by price from lowest to highest
-    |> Enum.uniq_by(fn %{id: id} -> id end) # Remove duplicate ids
+  def handle_task(task, nil), do: Task.await(task, @timeout)
+  def handle_task(task, acc) do
+    data = Task.await(task, @timeout)
+    
+    for {k, {s1, p1}} <- acc, into: %{} do
+      case data[k] do
+        nil -> {k, {s1, p1}}
+
+        {s2, p2} ->
+          # Evaluate lowest price
+          if p1 < p2, do: {k, {s1, p1}}, else: {k, {s2, p2}}
+      end
+    end
   end
 
 
@@ -54,11 +66,7 @@ defmodule SearchApi do
      %HTTPoison.Response{body: body, status_code: status_code} = HTTPoison.get!(url)
 
     case status_code do
-      200 -> 
-        body
-        |> Poison.decode!
-        |> Map.to_list 
-        |> Enum.map(fn({id, price}) -> %{id: id, price: price, supplier: supplier} end)
+      200 -> for {k, v} <- Poison.decode!(body), into: %{}, do: {k, {supplier, v}}
 
       _ ->
         {:error, "Error #{status_code}"}
